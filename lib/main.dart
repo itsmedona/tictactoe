@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tictactoe/view/home_page/home_page.dart';
+//import 'package:tictactoe/view/home_screen/home_screen.dart';
+import 'package:tictactoe/view/name_screen/name_screen.dart';
 
 void main() {
   runApp(tictactoe());
@@ -13,7 +14,7 @@ class tictactoe extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Tic Tac Toe',
-      home: HomePage(),
+      home: NameScreen(),
     );
   }
 }

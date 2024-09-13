@@ -3,26 +3,19 @@ import 'package:tictactoe/controller/logic.dart';
 import 'package:tictactoe/utils/color_constant.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String player1Name;
+  final String player2Name;
+
+  const HomePage({super.key, required this.player1Name, required this.player2Name});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  // necessary values that needed
-  String lastValue = "X";
+  String lastValue = Player.x;
   bool gameOver = false;
-  List<int> scoreboard = [
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0
-  ]; //score for the diff combination of the games[row1,2,3]
+  List<int> scoreboard = List.filled(8, 0);
   int turn = 0;
   String result = "";
   Game game = Game();
@@ -37,6 +30,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double boardWidth = MediaQuery.of(context).size.width;
+    String currentPlayer = lastValue == Player.x ? widget.player1Name : widget.player2Name;
+
     return Scaffold(
       backgroundColor: MainColor.primaryColor,
       body: Column(
@@ -44,21 +39,18 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "Its ${lastValue} turn ".toUpperCase(),
+            "It's $currentPlayer's turn".toUpperCase(),
             style: TextStyle(
               color: Colors.white,
               fontSize: 50,
             ),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          SizedBox(height: 20),
           Container(
             width: boardWidth,
             height: boardWidth,
             child: GridView.count(
-              crossAxisCount: Game.boardLength ~/
-                  3, //  ~/ allows to devide to integer & return an int as result
+              crossAxisCount: Game.boardLength ~/ 3,
               padding: EdgeInsets.all(16.0),
               mainAxisSpacing: 8.0,
               crossAxisSpacing: 8.0,
@@ -67,25 +59,19 @@ class _HomePageState extends State<HomePage> {
                   onTap: gameOver
                       ? null
                       : () {
-                          if (game.board![index] ==
-                              "") //if "X" each time click can replace the values
-                          {
+                          if (game.board![index] == Player.empty) {
                             setState(() {
                               game.board![index] = lastValue;
-                              turn++; /////////////////
+                              turn++;
                               gameOver = game.winnerCheck(
-                                  lastValue, index, scoreboard, 3); //////
+                                  lastValue, index, scoreboard, 3);
                               if (gameOver) {
-                                result = "$lastValue is the winner";
+                                result = "$currentPlayer is the winner";
                               } else if (!gameOver && turn == 9) {
-                                result = "Its a Draw!";
+                                result = "It's a Draw!";
                                 gameOver = true;
                               }
-
-                              if (lastValue == "X")
-                                lastValue = "O";
-                              else
-                                lastValue = "X";
+                              lastValue = lastValue == Player.x ? Player.y : Player.x;
                             });
                           }
                         },
@@ -100,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                       child: Text(
                         game.board![index],
                         style: TextStyle(
-                          color: game.board![index] == "X"
+                          color: game.board![index] == Player.x
                               ? Colors.blue
                               : Colors.red,
                           fontSize: 64.0,
@@ -112,24 +98,21 @@ class _HomePageState extends State<HomePage> {
               }),
             ),
           ),
-          SizedBox(
-            height: 30,
-          ),
+          SizedBox(height: 30),
           Text(
             result,
             style: TextStyle(color: Colors.white, fontSize: 54),
-          ), //////
+          ),
           ElevatedButton.icon(
             label: Text("Repeat the game"),
             onPressed: () {
               setState(() {
-                //erase the board
                 game.board = Game.initGameBoard();
-                lastValue = "X";
+                lastValue = Player.x;
                 gameOver = false;
-                turn = 0; ///////
+                turn = 0;
                 result = "";
-                scoreboard = [0, 0, 0, 0, 0, 0, 0, 0];
+                scoreboard = List.filled(8, 0);
               });
             },
             icon: Icon(
@@ -138,8 +121,7 @@ class _HomePageState extends State<HomePage> {
               color: MainColor.accentColor,
             ),
             style: ButtonStyle(
-                backgroundColor:
-                    WidgetStatePropertyAll(MainColor.secondaryColor)),
+                backgroundColor: MaterialStateProperty.all(MainColor.secondaryColor)),
           )
         ],
       ),
