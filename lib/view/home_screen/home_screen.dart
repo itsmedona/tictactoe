@@ -6,7 +6,8 @@ class HomePage extends StatefulWidget {
   final String player1Name;
   final String player2Name;
 
-  const HomePage({super.key, required this.player1Name, required this.player2Name});
+  const HomePage(
+      {super.key, required this.player1Name, required this.player2Name});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -30,7 +31,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double boardWidth = MediaQuery.of(context).size.width;
-    String currentPlayer = lastValue == Player.x ? widget.player1Name : widget.player2Name;
+    String currentPlayer =
+        lastValue == Player.x ? widget.player1Name : widget.player2Name;
 
     return Scaffold(
       backgroundColor: MainColor.primaryColor,
@@ -71,7 +73,8 @@ class _HomePageState extends State<HomePage> {
                                 result = "It's a Draw!";
                                 gameOver = true;
                               }
-                              lastValue = lastValue == Player.x ? Player.y : Player.x;
+                              lastValue =
+                                  lastValue == Player.x ? Player.y : Player.x;
                             });
                           }
                         },
@@ -121,7 +124,8 @@ class _HomePageState extends State<HomePage> {
               color: MainColor.accentColor,
             ),
             style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(MainColor.secondaryColor)),
+                backgroundColor:
+                    MaterialStateProperty.all(MainColor.secondaryColor)),
           )
         ],
       ),
